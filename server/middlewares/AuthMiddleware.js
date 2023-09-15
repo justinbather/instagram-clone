@@ -2,7 +2,7 @@ import User from "../models/UserModel.js";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
-export const userVerification = (req, res) => {
+export const userVerification = (req, res, next) => {
     const token = req.cookies.token
 
     if (!token) {
@@ -14,7 +14,9 @@ export const userVerification = (req, res) => {
         } else {
             const user = await User.findById(data.id)
             if (user) {
-                return res.json({status: true, user: user.username})
+                console.log("user verified")
+                req.user = user.username
+                return next()
             } else {
                 return res.json({ status: false})
             }

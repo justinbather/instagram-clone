@@ -20,6 +20,24 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: new Date(),
     },
+    posts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Post'
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'Following'
+        }
+    ],
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Followers'
+        }
+    ],
 });
 
 UserSchema.pre("save", async function () {
