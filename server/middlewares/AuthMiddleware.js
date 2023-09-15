@@ -10,7 +10,7 @@ export const userVerification = (req, res, next) => {
     } // replace token with dotenv import token
     jwt.verify(token, 'dksiwmc34m5h9rm53hdswxfki8736225', async (err, data) => {
         if (err) {
-            return res.json({status: false})
+            return res.status(400).json({message: "Failed to verify user", status: false})
         } else {
             const user = await User.findById(data.id)
             if (user) {
@@ -18,7 +18,7 @@ export const userVerification = (req, res, next) => {
                 req.user = user.username
                 return next()
             } else {
-                return res.json({ status: false})
+                return res.status(400).json({message: "Failed to verify user", status: false})
             }
         }
     })

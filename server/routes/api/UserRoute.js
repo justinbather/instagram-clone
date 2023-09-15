@@ -5,9 +5,9 @@ import { userVerification } from '../../middlewares/AuthMiddleware.js';
 const router = express.Router();
 
 router.get('/home', userVerification, HomeFeed);
-router.post('/create',userVerification , CreatePost);
+router.post('/create', userVerification , CreatePost);
 router.get('/profile', userVerification, FetchProfile);
-router.post('/follow', userVerification, FollowUser)
+router.post('/follow', userVerification, FollowUser);
 router.put('/profile');
 
 export default router;

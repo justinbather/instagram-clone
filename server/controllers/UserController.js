@@ -48,7 +48,7 @@ export const FollowUser = async (req, res) => {
         const followUser = await User.findOne({username: req.body.username})
         if (user) {
             if (followUser) {
-                
+
 
                 console.log(followUser)
                 user.following.push(followUser)
@@ -70,9 +70,16 @@ export const FollowUser = async (req, res) => {
 export const HomeFeed = async (req, res) => {
     try {
 
-        const user = await User.findOne(req.user.username)
+        //const user = await User.findOne()
+        const user = await User.findOne(req.user.username).populate('following', 'username') // Populate the 'following' field and select only the 'username' field
+        .exec();
+      
         if (user) {
-            return res.status(200).json({following: user.following})
+        const allUsers = await User.find() //Fetch all users
+        //Map through populated user.following array and grab the usernames, putting tshem into an array
+        const followingUsernames = user.following.map((followedUser) => followedUser.username);
+
+            return res.status(200).json({following: followingUsernames, users: allUsers})
         }
     } catch (err) {
         return res.status(400).json({message: "User must be logged in"})
