@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { TopNav } from "./components/TopNav";
+import { Stories } from "./components/Stories";
+import { Feed } from "./components/Feed";
 
 export const Home = () => {
     const [feed, setFeed] = useState([])
@@ -59,7 +62,16 @@ export const Home = () => {
     }, [])
 
     return (
-        <div className="flex flex-col w-screen h-screen bg-slate-400">
+        <div className="flex flex-col w-screen h-screen bg-white">
+            <div>
+                <TopNav />
+            </div>
+            <div>
+                <Stories />
+            </div>
+            <div>
+                <Feed />
+            </div>
             <a onClick={handleLogout}>Logout</a>
             <h1>Your feed</h1>
             {feed && feed.map((user) => (<a  className="text-lg text-white">{user}</a>))}
