@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
     const [feed, setFeed] = useState([])
     const [users, setUsers] = useState([]);
+
+    const navigate = useNavigate();
 
     const fetchFeed = async () => {
         try {
@@ -35,12 +38,29 @@ export const Home = () => {
         }
       }
 
+      const handleLogout = async () => {
+        await axios.get('http://localhost:8082/auth/logout', 
+        {
+            headers: {
+                "Content-Type": "application/json",
+                withCredentials: true
+            }
+        })
+        .then((res) => {
+            navigate('/login');
+        })
+        .catch((err) => {
+            alert(`Error logging user out code: ${err}`)
+        })
+      }
+
     useEffect(() => {
         fetchFeed();
     }, [])
 
     return (
         <div className="flex flex-col w-screen h-screen bg-slate-400">
+            <a onClick={handleLogout}>Logout</a>
             <h1>Your feed</h1>
             {feed && feed.map((user) => (<a  className="text-lg text-white">{user}</a>))}
             { users && users.map((user) => (<a onClick={(e) => followUser(user.username)}>{user.username}</a>))}

@@ -2,6 +2,7 @@ import User from "../models/UserModel.js"
 import Post from "../models/PostModel.js"
 
 
+// Handle creating of post
 export const CreatePost = async (req, res, next) => {
     
     try {
@@ -11,15 +12,10 @@ export const CreatePost = async (req, res, next) => {
                 description: req.body.description,
                 author: user._id,
             };
-
             const post = await Post.create(newPost)
-
             user.posts.push(post)
             user.save()
-            
-            return res.status(201).json({message: "Post created", success: true, post})
-            
-          
+            return res.status(201).json({message: "Post created", success: true, post})   
         }
        
     } catch(error) {
@@ -29,6 +25,8 @@ export const CreatePost = async (req, res, next) => {
 
 };
 
+
+// Fetches User Profile
 export const FetchProfile = async (req, res) => {
     try {
         const user = await User.findOne(req.user.username);
@@ -41,6 +39,7 @@ export const FetchProfile = async (req, res) => {
     }
 };
 
+// Handle Following user
 export const FollowUser = async (req, res) => {
     try {
         const user = await User.findOne(req.user.username)
@@ -50,7 +49,6 @@ export const FollowUser = async (req, res) => {
             if (followUser) {
 
 
-                console.log(followUser)
                 user.following.push(followUser)
                 user.save()
                 followUser.followers.push(user)

@@ -6,10 +6,12 @@ export const userVerification = (req, res, next) => {
     const token = req.cookies.token
 
     if (!token) {
-        return res.json({status: false})
+        console.log('No token in header')
+        return res.redirect('/login')
     } // replace token with dotenv import token
     jwt.verify(token, 'dksiwmc34m5h9rm53hdswxfki8736225', async (err, data) => {
         if (err) {
+            console.log('ffailed to verify')
             return res.status(400).json({message: "Failed to verify user", status: false})
         } else {
             const user = await User.findById(data.id)

@@ -30,17 +30,19 @@ export const Login = () => {
     }
 
     return (
-        <div className="flex w-screen h-screen bg-black">
-            <h1 className="text-white">Hello</h1>
+        <div className="flex flex-col w-screen h-screen bg-white text-center justify-center items-center gap-10 pb-20">
+            <h1 className="text-slate-950 text-2xl">Instagram</h1>
+            <div className="flex flex-col w-64 justify-center items-center">
+                <form onSubmit={handleSubmit} className="flex flex-col justify-center w-full items-center gap-2">
 
-            <form onSubmit={handleSubmit}>
-                <p>Enter your user name</p>
-            <input placeholder="username" value={username} onChange={(e) => setUsername(e.target.value)}></input>
-                <p>Enter your password</p>
-            <input placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-            <button type="submit">Log in</button>
-            </form>
+                <input placeholder="Phone number, username, or email" value={username} onChange={(e) => setUsername(e.target.value)} className="bg-zinc-100/50 w-full h-8 border rounded-sm placeholder:text-xs placeholder:font-bold placeholder:font-inter placeholder:pl-2 placeholder:text-slate-500/80"></input>
 
+                <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-zinc-100/50 w-full h-8 border rounded-sm placeholder:text-xs placeholder:font-bold placeholder:font-inter placeholder:pl-2 placeholder:text-slate-500/80"></input>
+                <a className="font-inter text-[.9rem] text-[#4cb4f9] font-bold mb-5 mt-2">Forgot password?</a>
+                <button type="submit" className="w-full h-9 border rounded-xl bg-[#4cb4f9] text-white font-bold font-inter">Log in</button>
+                <a className="font-inter text-[.9rem] text-slate-700 my-5">Don't have an account? <span className="font-inter text-[#4cb4f9] font-bold text-[.9rem]">Sign up</span></a>
+                </form>
+            </div>
         </div>
     )
 }
