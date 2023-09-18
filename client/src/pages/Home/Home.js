@@ -64,7 +64,7 @@ export const Home = () => {
 
     return (
         <>
-        <div className="flex flex-col w-screen h-screen bg-white">
+        <div className="flex flex-col w-screen h-screen bg-black">
             <div>
                 <TopNav />
             </div>
