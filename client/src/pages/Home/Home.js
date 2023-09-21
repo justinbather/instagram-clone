@@ -81,8 +81,8 @@ export const Home = () => {
             { users && users.map((user) => (<a onClick={(e) => followUser(user.username)}>{user.username}</a>))}
         </div>
         <div className="w-full bottom-0 fixed">
-        <Navbar />
-    </div>
+            <Navbar />
+        </div>
     </>
     )
 };

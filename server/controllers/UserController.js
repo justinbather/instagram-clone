@@ -1,25 +1,27 @@
 import User from "../models/UserModel.js"
 import Post from "../models/PostModel.js"
 
+import uploadImage from './ImageController.js'
+
+
+
 
 // Handle creating of post
 export const CreatePost = async (req, res, next) => {
-    
     try {
         const user = await User.findOne(req.user.username);
-        if (user) {
-            const newPost = {
-                description: req.body.description,
-                author: user._id,
-            };
-            const post = await Post.create(newPost)
-            user.posts.push(post)
-            user.save()
-            return res.status(201).json({message: "Post created", success: true, post})   
+        if (!user) {
+            return res.json({message: "user does not exist. Sign in.", error: error})
         }
-       
+        //uploadImage handles post creation, should refactor this
+        uploadImage(req, res, async(error) => {
+            if (error) {
+                return res.status(500).json({message: 'Error uploading image'})
+            }
+        });
     } catch(error) {
-        return res.json({message: "user does not exist. Sign in.", error: error})
+        console.error('Error creating post:', error)
+        return res.status(500).json({message: "error uploading", error: error})
     }
     
 
