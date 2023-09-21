@@ -19,7 +19,7 @@ s3.config.update({
 const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
 
-const uploadImage = async (req, res) => {
+export const uploadImage = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({error: 'No image provided'})
@@ -57,4 +57,31 @@ const uploadImage = async (req, res) => {
     }
 };
 
-export default uploadImage;
+
+
+export const uploadProfilePicture = async (req, res) => {
+
+    try{
+        if (!req.file) {
+            return res.status(400).json({message: 'No profile picture given'})
+        }
+
+        const params = {
+            Bucket: 'justin-ig-clone-storage',
+            Key: `${Date.now()}_${req.file.originalname}`,
+            Body: req.file.buffer,
+        };
+
+        const uploadResponse = await s3.upload(params).promise();
+        const update = uploadResponse.Location
+
+        const updatedUser = await User.findByIdAndUpdate(req.user, {profilePicture: update})
+
+        return res.status(202).json({message: 'Updated profile picture', update})
+
+    } catch(error) {
+        console.log(error)
+        return res.status(500).json({message: 'Error updating profile picture', error})
+        
+    }
+}

@@ -20,6 +20,9 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: new Date(),
     },
+    profilePicture: String,
+    bio: String,
+    
     posts: [
         {
             type: mongoose.Schema.Types.ObjectId,

@@ -17,7 +17,8 @@ export const userVerification = (req, res, next) => {
             const user = await User.findById(data.id)
             if (user) {
                 console.log("user verified")
-                req.user = user.username
+                req.user = user._id
+                console.log(req.user)
                 return next()
             } else {
                 return res.status(400).json({message: "Failed to verify user", status: false})

@@ -1,7 +1,7 @@
 import User from "../models/UserModel.js"
 import Post from "../models/PostModel.js"
 
-import uploadImage from './ImageController.js'
+import {uploadImage, uploadProfilePicture} from './ImageController.js'
 
 
 
@@ -31,13 +31,39 @@ export const CreatePost = async (req, res, next) => {
 // Fetches User Profile
 export const FetchProfile = async (req, res) => {
     try {
-        const user = await User.findOne(req.user.username);
+       
+        const user = await User.findById(req.user);
+        console.log(user)
         if (user) {
             const posts = await Post.find({author: user._id})
-            return res.status(201).json({user:{ username: user.username, email: user.email, posts: user.posts}, posts})
+            return res.status(201).json({user:{ username: user.username, 
+                                            email: user.email, bio: user.bio, 
+                                            profilePicture: user.profilePicture,
+                                            posts: user.posts, following: user.following,
+                                            followers: user.followers}})
         }
     } catch(err) {
-        return res.status(400).json({message: 'User not found'})
+        return res.status(400).json({message: 'Error fetching profile', err})
+    }
+};
+
+export const UpdateProfile = async (req, res) => {
+    try {
+        
+        if (req.file) {
+            uploadProfilePicture(req, res, async(error) => {
+                if (error) {
+                    return res.status(500).json({message: 'Error uploading image'})
+                }
+            });
+        } else {
+            const update = req.body;
+            const user = await User.findByIdAndUpdate(req.user, update)
+            return res.status(202).json({message: 'User updated', user, update})
+        }
+        
+        } catch(error) {
+            return res.status(500).json({message: 'Error updating user', error})
     }
 };
 
