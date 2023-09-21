@@ -12,6 +12,7 @@ import React, {useState, useEffect} from 'react';
 export const ProfileInfo = () => {
 
     const [user, setUser] = useState({})
+    const [posts, setPosts] = useState({})
     const [loading, setLoading] = useState(true)
     
     
@@ -25,6 +26,7 @@ export const ProfileInfo = () => {
                 })
                 if (response.status === 200) {
                     setUser(response.data.user)
+                    setPosts(response.data.posts)
                     setLoading(false)
                     console.log(response)
                 } else {
@@ -80,7 +82,7 @@ export const ProfileInfo = () => {
             <div className="flex flex-col gap-4 mt-2">
                 <ProfileDescription bio={user.bio} name={user.username} loading={loading} />
                 
-                <ProfileFeed />
+                <ProfileFeed posts={posts} loading={loading}/>
             </div>
         </div>
     )

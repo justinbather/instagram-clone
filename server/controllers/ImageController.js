@@ -34,10 +34,10 @@ export const uploadImage = async (req, res) => {
         const uploadResponse = await s3.upload(params).promise();
         const mediaUrl = uploadResponse.Location
 
-        const user = await User.findOne(req.user.username);
+        const user = await User.findById(req.user);
 
         const newPost = {
-            description: req.body.description,
+            description: req.body.description || ' ',
             author: user._id,
             media: mediaUrl
         }

@@ -40,7 +40,7 @@ export const FetchProfile = async (req, res) => {
                                             email: user.email, bio: user.bio, 
                                             profilePicture: user.profilePicture,
                                             posts: user.posts, following: user.following,
-                                            followers: user.followers}})
+                                            followers: user.followers}, posts})
         }
     } catch(err) {
         return res.status(400).json({message: 'Error fetching profile', err})
