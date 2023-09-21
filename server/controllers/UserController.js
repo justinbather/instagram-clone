@@ -36,10 +36,6 @@ export const FetchProfile = async (req, res) => {
         console.log(user)
         if (user) {
             const posts = await Post.find({author: user._id})
-      
-            const numFollowing = user.following.length
-            console.log( `following:${numFollowing}`)
-
             return res.status(200).json({user:{ username: user.username, 
                                             email: user.email, bio: user.bio, 
                                             profilePicture: user.profilePicture,
