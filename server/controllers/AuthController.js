@@ -28,10 +28,11 @@ export const Signup = async (req, res, next) => {
 export const Login = async (req, res, next) => {
     try {
         const { username, password } = req.body;
+        console.log(username, password)
         if (!username || !password) {
             return res.json({ message: 'All fields are required'})
         }
-        const user = await User.findOne({username});
+        const user = await User.findOne({username: username});
         if(!user) {
             return res.json({ message: 'Incorrect login'})
         }

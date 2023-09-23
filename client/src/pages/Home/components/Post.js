@@ -5,22 +5,25 @@ import saveIcon from '../../../assets/icons/save-icon-white.svg';
 
 
 
-export const Post = () => {
+export const Post = (props) => {
+    console.log(props.post)
     return( 
         <div className="flex flex-col w-full bg-black pb-5">
             
             <div className="flex flex-row items-center justify-around gap-60 py-3">
                 <div className="flex flex-row items-center gap-2">
-                    <div className="w-6 h-6 rounded-full ring-2 ring-red-400"></div>
-                    <p className="font-inter text-xs font-bold text-white">justin</p>
+                    <div className="w-6 h-6 rounded-full ring-2 ring-red-400">
+                        <img src={props.post.profilePicture} className='w-full h-full object-cover'></img>
+                    </div>
+                    <p className="font-inter text-xs font-bold text-white">{props.post.username}</p>
                 </div>
                 <div>
                     <p className="font-inter text-white font-bold text-sm text-center">...</p>
                 </div>
             </div>
 
-            <div className="w-full h-96 bg-green-100">
-
+            <div className="w-full h-96 bg-zinc-600">
+                <img src={props.post.postMedia} className='w-full h-full object-cover'></img>
             </div>
 
             <div className="flex flex-row w-full h-10 items-center justify-around gap-60">
@@ -35,13 +38,13 @@ export const Post = () => {
             </div>
 
             <div className='flex w-full bg-black justify-start items-center'>
-                <p className='font-inter text-white text-sm font-bold ml-2'>32 likes</p>
+                <p className='font-inter text-white text-sm font-bold ml-2'>{props.post.likes} likes</p>
 
             </div>
 
             <div className='flex flex-col justify-start text-left'>
                 <div className='flex flex-row justify-start items-center'>
-                    <p className='font-inter text-white text-sm ml-2'><a className='font-bold'>justin</a> Lorem ipsum </p>
+                    <p className='font-inter text-white text-sm ml-2'><a className='font-bold'>{props.post.username} </a>{props.post.description}</p>
 
                 </div>
 
@@ -60,7 +63,7 @@ export const Post = () => {
             </div>
 
             <div className='flex flex-row justify-start items-center'>
-                <p className='font-inter text-zinc-400 text-sm ml-2'>Aug 3</p>
+                <p className='font-inter text-zinc-400 text-sm ml-2'>{props.post.posted}</p>
             </div>
 
         </div>
