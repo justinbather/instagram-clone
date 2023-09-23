@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"
 
 
 
@@ -13,6 +14,7 @@ export const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('posting to node')
         axios.post('http://localhost:8082/auth/login', {
             username: username,
             password: password,
@@ -22,7 +24,7 @@ export const Login = () => {
             withCredentials: true,
         })
         .then((res) => {
-            navigate('/home');
+            console.log(res)
         })
         .catch((err) => {
             alert(`Failed to login user, error:${err}`)

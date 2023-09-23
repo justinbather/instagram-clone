@@ -9,16 +9,38 @@ import {uploadImage, uploadProfilePicture} from './ImageController.js'
 // Handle creating of post
 export const CreatePost = async (req, res, next) => {
     try {
-        const user = await User.findOne(req.user.username);
+        const user = await User.findById(req.user);
         if (!user) {
             return res.json({message: "user does not exist. Sign in.", error: error})
         }
-        //uploadImage handles post creation, should refactor this
-        uploadImage(req, res, async(error) => {
-            if (error) {
-                return res.status(500).json({message: 'Error uploading image'})
-            }
-        });
+        
+        const mediaUrl = await uploadImage(req, res, async (error) => {
+                if(error) {
+                    console.log('promise rejecting')
+                    return res.status(500).json({message: 'error uploading'})
+
+                } else {
+                    console.log('promise resolved')
+                    console.log(mediaUrl)
+                    return res
+                }
+            })
+        
+            const uploadedMediaUrl = await mediaUrl
+            const newPost = new Post({
+                description: req.body.description,
+                author: user._id,
+                media: uploadedMediaUrl
+            })
+            
+            const post = await newPost.save()
+            user.posts.push(post._id)
+            await user.save()
+            return res.status(200).json({message:'Post created successfully', post})
+
+        
+
+        
     } catch(error) {
         console.error('Error creating post:', error)
         return res.status(500).json({message: "error uploading", error: error})
@@ -67,10 +89,26 @@ export const UpdateProfile = async (req, res) => {
     }
 };
 
+// /profile/following: Fetches the users following users
+// Returns following users username, bio, profilePicture, _id
+export const fetchFollowing = async (req, res) => {
+    try {
+        const user = await User.findById(req.user)
+        if (user) {
+            const following = await User.findById(req.user).populate('following', ['_id','username', 'bio', 'profilePicture']).exec()
+            console.log(following)
+            return res.status(200).json({success: true, following})
+        }
+    } catch(error) {
+        console.log('Error fetching following users', error)
+        return res.status(500).json({message:'Error fetching following users', error: error})
+    }
+}
+
 // Handle Following user
 export const FollowUser = async (req, res) => {
     try {
-        const user = await User.findOne(req.user.username)
+        const user = await User.findById(req.user)
 
         const followUser = await User.findOne({username: req.body.username})
         if (user) {
@@ -97,7 +135,7 @@ export const HomeFeed = async (req, res) => {
     try {
 
         //const user = await User.findOne()
-        const user = await User.findOne(req.user.username).populate('following', 'username') // Populate the 'following' field and select only the 'username' field
+        const user = await User.findById(req.user).populate('following', 'username') // Populate the 'following' field and select only the 'username' field
         .exec();
       
         if (user) {
@@ -105,7 +143,7 @@ export const HomeFeed = async (req, res) => {
         //Map through populated user.following array and grab the usernames, putting tshem into an array
         const followingUsernames = user.following.map((followedUser) => followedUser.username);
 
-            return res.status(200).json({following: followingUsernames, users: allUsers})
+            return res.status(200).json({following: followingUsernames, users: allUsers, user})
         }
     } catch (err) {
         return res.status(400).json({message: "User must be logged in"})

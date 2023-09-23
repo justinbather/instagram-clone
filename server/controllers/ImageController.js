@@ -20,41 +20,30 @@ const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
 
 export const uploadImage = async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({error: 'No image provided'})
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!req.file) {
+                reject('no image provided')
+            }
+    
+            const params = {
+                Bucket: 'justin-ig-clone-storage',
+                Key: `${Date.now()}_${req.file.originalname}`,
+                Body: req.file.buffer,
+            };
+    
+            const uploadResponse = await s3.upload(params).promise();
+            const mediaUrl = uploadResponse.Location
+            console.log(mediaUrl)
+            //Returns the location url for the image with .Location
+            resolve(mediaUrl);
+        } catch (error) {
+            console.error('Error uploading file in ImageController')
+            reject('Error uploading to AWS')
         }
 
-        const params = {
-            Bucket: 'justin-ig-clone-storage',
-            Key: `${Date.now()}_${req.file.originalname}`,
-            Body: req.file.buffer,
-        };
-
-        const uploadResponse = await s3.upload(params).promise();
-        const mediaUrl = uploadResponse.Location
-
-        const user = await User.findById(req.user);
-
-        const newPost = {
-            description: req.body.description || ' ',
-            author: user._id,
-            media: mediaUrl
-        }
-
-        const post = await Post.create(newPost)
-        user.posts.push(post)
-        user.save()
-
-
-
-
-        //Returns the location url for the image with .Location
-        return res.status(201).json({message: "Image uploaded", post})
-    } catch (error) {
-        console.error('Error uploading file in ImageController')
-        return res.status(500).json({error: 'Server error uploading to aws'})
-    }
+    })
+    
 };
 
 
@@ -63,7 +52,7 @@ export const uploadProfilePicture = async (req, res) => {
 
     try{
         if (!req.file) {
-            return res.status(400).json({message: 'No profile picture given'})
+            reject('No image provided')
         }
 
         const params = {
