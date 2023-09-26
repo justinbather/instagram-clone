@@ -47,7 +47,7 @@ export const Home = () => {
       useEffect(() => {
         const fetchFeed = async () => {
             try {
-            const response = await axios.get('http://localhost:8082/user/home',  {
+            const response = await axios.get('http://localhost:8082/feed',  {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             })

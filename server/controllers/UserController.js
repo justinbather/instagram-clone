@@ -111,26 +111,66 @@ export const FollowUser = async (req, res) => {
         const user = await User.findById(req.user)
 
         const followUser = await User.findOne({username: req.body.username})
-        if (user) {
-            if (followUser) {
+        if (!user) { 
+            console.log('Please log in')
+            return res.status(400).json({message:'User not found when trying to find user in DB to unfollow'})
+         }
+         if (!followUser) {
+            console.log('User does not exist')
+            return res.status(400).json({message: 'Could not find user with posted username, user does not exist'})
+         }
 
+        if (user.following.includes(followUser._id)) {
+            console.log('You already follow this user')
+            res.status(400).json({message: 'user already follows posted user'})
+        } else {
+            user.following.push(followUser)
+            user.save()
+            followUser.followers.push(user)
+            followUser.save()
 
-                user.following.push(followUser)
-                user.save()
-                followUser.followers.push(user)
-                followUser.save()
-                
-                return res.status(200).json({message: `${user.username} followed ${followUser.username}`})
-            } else {
-                return res.status(400).json({message: "user not found"})
-            }
-            
+            return res.status(200).json({message: `${user.username} followed ${followUser.username}`})
         }
+
     } catch(err) {
         return res.status(400).json({message: "User must be logged in to follow another user", error: err})
     }
 };
 
+
+//Test this 
+export const unfollowUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user)
+        const unfollowUser = await User.findOne({username: req.body.username}) //Username posted in request body
+         if (!user) { 
+            console.log('Please log in')
+            return res.status(400).json({message:'User not found when trying to find user in DB to unfollow'})
+         }
+         if (!unfollowUser) {
+            console.log('User does not exist')
+            return res.status(400).json({message: 'Could not find user with posted username, user does not exist'})
+         }
+         //User and unfollowUser exists
+         if (user.following.includes(unfollowUser._id)) {
+            //Need to remove both users from eachothers following and followers
+            const userIndex = user.following.indexOf(unfollowUser._id)
+            user.following.splice(userIndex, 1) // Removes id inplace, does not create a shallow copy
+            await user.save()
+            const unfollowUserIndex = unfollowUser.followers.indexOf(user._id)
+            unfollowUser.followers.splice(unfollowUserIndex, 1)
+            await unfollowUser.save()
+            return res.status(200).json({message: 'Successfully unfollowed user', user: user, unfollowed: unfollowUser})
+         }
+            
+         } catch(error) {
+            console.log(error)
+            return res.status(500).json({message: "An error occured when attempting to unfollow a user", error: error})
+         }
+    };
+
+
+//deprecated
 export const HomeFeed = async (req, res) => {
     try {
 
