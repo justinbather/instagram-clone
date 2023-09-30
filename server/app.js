@@ -5,6 +5,7 @@ import test from "./routes/api/test.js"
 import auth from "./routes/api/AuthRoute.js"
 import user from "./routes/api/UserRoute.js"
 import feed from "./routes/api/FeedRoute.js"
+import search from "./routes/api/SearchRoute.js"
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -22,7 +23,8 @@ app.use(cookieParser());
 app.use('/api', test);
 app.use('/auth', auth);
 app.use('/user', user);
-app.use('/feed', feed)
+app.use('/feed', feed);
+app.use('/search', search);
 
 const port = process.env.PORT || 8082;
 
