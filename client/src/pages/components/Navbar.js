@@ -11,7 +11,9 @@ export const Navbar = () => {
             <a href='http://localhost:3000/home'>
                 <img className='w-6 h-6' src={homeIcon}></img>
             </a>
-            <img className='w-6 h-6' src={searchIcon}></img>
+            <a href='http://localhost:3000/search'>
+                <img className='w-6 h-6' src={searchIcon}></img>
+            </a>
             <img className='w-6 h-6' src={newPostIcon}></img>
             
             <img className='w-6 h-6' src={reelsIcon}></img>

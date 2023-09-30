@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie"
 
 
@@ -25,6 +25,9 @@ export const Login = () => {
         })
         .then((res) => {
             console.log(res)
+            if (res.status === 201) {
+                navigate('/home')
+            }
         })
         .catch((err) => {
             alert(`Failed to login user, error:${err}`)
