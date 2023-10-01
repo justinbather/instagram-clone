@@ -39,10 +39,10 @@ export const Search = () => {
     }, [searchInput])
     
     return(
-        <div>
+        <div className="bg-black w-full flex flex-col pt-5 px-5">
             <div>
             <form>
-            <input type="text" onChange={handleChange}/>
+            <input className="bg-zinc-800 w-full h-6 rounded-md pl-5 placeholder:text-sm placeholder:text-zinc-400" type="text" onChange={handleChange} placeholder="Search"/>
             </form>
             </div>
             {displayResults && results && results.length > 0 ? results.map((item) => (
@@ -50,6 +50,22 @@ export const Search = () => {
                 <h1>{item.username}</h1>
             )) : (<h1>Please search</h1>)}
             
+            <div className="bg-black w-full flex flex-col justify-start items-start gap-3">
+                <div className="w-full flex flex-row justify-start gap-3 items-center">
+                    <div className="bg-zinc-400 rounded-full h-10 w-10"></div>
+                    <div className="flex-col justify-center items-start">
+                        <h3 className="font-inter text-white text-sm font-bold">justinbather</h3>
+                        <p className="font-inter text-zinc-700 text-xs">Justin Bather</p>
+                    </div>
+                </div>
+                <div className="w-full flex flex-row justify-start gap-3 items-center">
+                    <div className="bg-zinc-400 rounded-full h-10 w-10"></div>
+                    <div className="flex-col justify-center items-start">
+                        <h3 className="font-inter text-white text-sm font-bold ">justinbather</h3>
+                        <p className="font-inter text-zinc-700 text-xs ">Justin Bather</p>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 };
