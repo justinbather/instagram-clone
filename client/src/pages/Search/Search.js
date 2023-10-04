@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {useEffect, useState} from "react";
+import { Navbar } from "../components/Navbar";
 
 export const Search = () => {
 
@@ -39,33 +40,31 @@ export const Search = () => {
     }, [searchInput])
     
     return(
-        <div className="bg-black w-full flex flex-col pt-5 px-5">
+        <div className="bg-black w-full h-screen flex flex-col pt-5 px-5">
             <div>
             <form>
-            <input className="bg-zinc-800 w-full h-6 rounded-md pl-5 placeholder:text-sm placeholder:text-zinc-400" type="text" onChange={handleChange} placeholder="Search"/>
+            <input className="bg-zinc-800 text-white w-full h-6 rounded-md pl-5 placeholder:text-sm placeholder:text-zinc-400" type="text" onChange={handleChange} placeholder="Search"/>
             </form>
             </div>
-            {displayResults && results && results.length > 0 ? results.map((item) => (
-                
-                <h1>{item.username}</h1>
-            )) : (<h1>Please search</h1>)}
+            
             
             <div className="bg-black w-full flex flex-col justify-start items-start gap-3">
+            {displayResults && results && results.length > 0 ? results.map((item) => (
                 <div className="w-full flex flex-row justify-start gap-3 items-center">
-                    <div className="bg-zinc-400 rounded-full h-10 w-10"></div>
-                    <div className="flex-col justify-center items-start">
-                        <h3 className="font-inter text-white text-sm font-bold">justinbather</h3>
-                        <p className="font-inter text-zinc-700 text-xs">Justin Bather</p>
-                    </div>
-                </div>
-                <div className="w-full flex flex-row justify-start gap-3 items-center">
-                    <div className="bg-zinc-400 rounded-full h-10 w-10"></div>
-                    <div className="flex-col justify-center items-start">
-                        <h3 className="font-inter text-white text-sm font-bold ">justinbather</h3>
-                        <p className="font-inter text-zinc-700 text-xs ">Justin Bather</p>
-                    </div>
+                <div className="bg-zinc-400 rounded-full h-10 w-10"></div>
+                <div className="flex-col justify-center items-start">
+                    <h3 className="font-inter text-white text-sm font-bold">{item.username}</h3>
+                    <p className="font-inter text-zinc-700 text-xs"></p>
                 </div>
             </div>
+                
+            )) : (<h1>Please search</h1>)}
+                
+                
+            </div>
+            <div className="w-full bottom-0 fixed">
+            <Navbar />
+        </div>
         </div>
     )
 };
