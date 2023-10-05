@@ -17,7 +17,7 @@ function App() {
         <Route path='/test' index element={<Test />}></Route>
         <Route path='/login' index element={<Login />}></Route>
         <Route path='/home' index element={<Home />}></Route>
-        <Route path='/profile' index element={<Profile />}></Route>
+        <Route path='/profile/:usernameParam?' index element={<Profile />}></Route>
         <Route path='/search' index element={<Search />}></Route>
         </Routes>
       </Router>

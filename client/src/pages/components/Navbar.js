@@ -5,7 +5,7 @@ import reelsIcon from '../../assets/icons/reels-icon-white-outline.svg'
 
 import { Link } from "react-router-dom";
 
-export const Navbar = () => {
+export const Navbar = (props) => {
     return(
         <div className="flex flex-row w-full h-30 py-3 bg-black justify-around items-center border-t-[.5px] border-slate-500">
             <a href='http://localhost:3000/home'>

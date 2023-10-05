@@ -26,6 +26,7 @@ export const Login = () => {
         .then((res) => {
             console.log(res)
             if (res.status === 201) {
+                console.log(res.cookies)
                 navigate('/home')
             }
         })

@@ -2,11 +2,32 @@ import likeIcon from '../../../assets/icons/heart-icon-white.png';
 import commentIcon from '../../../assets/icons/comment-icon-white.svg';
 import shareIcon from '../../../assets/icons/share-icon-white.png';
 import saveIcon from '../../../assets/icons/save-icon-white.svg';
+import axios from 'axios';
 
 
 
 export const Post = (props) => {
     console.log(props.post)
+
+    const handleLike = async (postId) => {
+        try {
+            await axios.post('https://localhost:8082/user/like',
+            {postId: postId}, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            }).then((res) => {
+                if (res.status === 200) {
+                //need to display new likes amount
+                console.log('Post liked successfully')
+                }
+            })
+            
+        } catch (error) {
+            console.log('error liking post', error)
+        }
+    }
+
+    
     return( 
         <div className="flex flex-col w-full bg-black pb-5">
             
@@ -28,7 +49,9 @@ export const Post = (props) => {
 
             <div className="flex flex-row w-full h-10 items-center justify-around gap-60">
                 <div className="flex flex-row items-center justify-evenly gap-3">
-                    <img className='h-6 w-6' src={likeIcon}></img>
+                    <a onClick={handleLike(props.post._id)} >
+                        <img className='h-6 w-6' src={likeIcon}></img>
+                    </a>
                     <img className='h-6 w-6' src={commentIcon}></img>
                     <img className='h-6 w-6' src={shareIcon}></img>
                 </div>
@@ -38,7 +61,9 @@ export const Post = (props) => {
             </div>
 
             <div className='flex w-full bg-black justify-start items-center'>
-                <p className='font-inter text-white text-sm font-bold ml-2'>{props.post.likes} likes</p>
+                {props.post.likes > 0 ? <p className='font-inter text-white text-sm font-bold ml-2'>{props.post.likes} likes</p> 
+                : <p className='font-inter text-white text-sm font-bold ml-2'></p>}
+                
 
             </div>
 

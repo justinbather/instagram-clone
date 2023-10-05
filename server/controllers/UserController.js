@@ -52,22 +52,54 @@ export const CreatePost = async (req, res, next) => {
 
 // Fetches User Profile
 export const FetchProfile = async (req, res) => {
-    try {
-       
-        const user = await User.findById(req.user);
-        console.log(user)
-        if (user) {
-            const posts = await Post.find({author: user._id})
-            return res.status(200).json({user:{ username: user.username, 
-                                            email: user.email, bio: user.bio, 
-                                            profilePicture: user.profilePicture,
-                                            posts: user.posts, following: user.following,
-                                            followers: user.followers}, posts})
+    
+    const usernameParam = req.params['username']
+    if (usernameParam) {
+        try {
+            const userProfile = await User.findOne({username: usernameParam});
+            const user = await User.findById(req.user);
+
+            if (!userProfile) {
+                return res.status(400).json({message:'Could not find user'})
+            }
+        
+            
+        
+        
+            const posts = await Post.find({author: userProfile._id})
+            const followingThisUser = user.following.includes(userProfile._id)
+            
+            console.log('following '+ followingThisUser)
+            return res.status(200).json({user:{ username: userProfile.username, 
+                                                    bio: userProfile.bio, profilePicture: userProfile.profilePicture,
+                                                    posts: userProfile.posts, following: userProfile.following,
+                                                    followers: userProfile.followers}, posts, followingThisUser})
+        } catch (error) {
+            return res.status(400).json({message:'Could not find posts'})
         }
-    } catch(err) {
-        return res.status(400).json({message: 'Error fetching profile', err})
-    }
-};
+
+        } else {
+
+            try {
+                const user = await User.findById(req.user);
+                console.log(user)
+                if (!user) {
+                    return res.status(404).json({message:'User does not exist'})
+                }
+
+                const posts = await Post.find({author: user._id})
+                return res.status(200).json({user:{ username: user.username, 
+                                                email: user.email, bio: user.bio, 
+                                                profilePicture: user.profilePicture,
+                                                posts: user.posts, following: user.following,
+                                                followers: user.followers}, posts})
+        
+                
+            } catch(err) {
+                return res.status(400).json({message: 'Error fetching profile', err})
+            }
+        }
+    };
 
 export const UpdateProfile = async (req, res) => {
     try {
@@ -108,12 +140,14 @@ export const fetchFollowing = async (req, res) => {
 // Handle Following user
 export const FollowUser = async (req, res) => {
     try {
+        const {usernameParam} = req.params['username']
         const user = await User.findById(req.user)
+
 
         const followUser = await User.findOne({username: req.body.username})
         if (!user) { 
             console.log('Please log in')
-            return res.status(400).json({message:'User not found when trying to find user in DB to unfollow'})
+            return res.status(400).json({message:'User not logged in'})
          }
          if (!followUser) {
             console.log('User does not exist')

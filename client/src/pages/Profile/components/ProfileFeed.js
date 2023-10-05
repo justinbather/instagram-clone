@@ -2,7 +2,8 @@ import reelsIcon from "../../../assets/icons/reels-icon-white-outline.svg";
 import feedIcon from "../../../assets/icons/feed-icon-white.png"
 
 export const ProfileFeed = (props) => {
-   
+  
+
     return(
         <div className="flex flex-col w-full bg-black gap-2">
             <div className="flex flex-row justify-around items-center">
