@@ -63,9 +63,6 @@ export const FetchProfile = async (req, res) => {
                 return res.status(400).json({message:'Could not find user'})
             }
         
-            
-        
-        
             const posts = await Post.find({author: userProfile._id})
             const followingThisUser = user.following.includes(userProfile._id)
             
@@ -137,7 +134,7 @@ export const fetchFollowing = async (req, res) => {
     }
 }
 
-// Handle Following user
+//* Handle Following user
 export const FollowUser = async (req, res) => {
     try {
         const {usernameParam} = req.params['username']
@@ -172,7 +169,7 @@ export const FollowUser = async (req, res) => {
 };
 
 
-//Test this 
+//todo: Test this 
 export const unfollowUser = async (req, res) => {
     try {
         const user = await User.findById(req.user)
@@ -204,7 +201,7 @@ export const unfollowUser = async (req, res) => {
     };
 
 
-//deprecated
+//!deprecated
 export const HomeFeed = async (req, res) => {
     try {
 

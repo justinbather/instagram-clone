@@ -8,7 +8,7 @@ export const ProfileActions = (props) => {
 
     }
 
-    console.log(props.userIsFollowing)
+    console.log(props.isFollowing)
 
     const handleFollow = async () => {
         try {
@@ -31,13 +31,13 @@ export const ProfileActions = (props) => {
         }
 
     useEffect(() => {
-        setIsFollowing(props.userIsFollowing) //Update following state here so we can change it upon unfollow or follow
+        setIsFollowing(props.isFollowing) //Update following state here so we can change it upon unfollow or follow
     }, [props])
 
 
     return(
         <div className="flex flex-row w-full justify-center items-center gap-1">
-            {props.userIsFollowing ? <button onClick={handleUnfollow} className="h-6 w-1/2 bg-zinc-800 rounded-md text-center font-bold text-white font-inter text-sm">Following</button>
+            {props.isFollowing ? <button onClick={handleUnfollow} className="h-6 w-1/2 bg-zinc-800 rounded-md text-center font-bold text-white font-inter text-sm">Following</button>
             : <button onClick={handleFollow} className="h-6 w-1/2 bg-blue-400 rounded-md text-center font-bold text-white font-inter text-sm">Follow</button>
 
 }

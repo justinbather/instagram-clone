@@ -3,59 +3,15 @@ import { ProfileDescription } from "./ProfileDescription";
 import { ProfileFeed } from "./ProfileFeed";
 import notificationBell from "../../../assets/icons/notificationbell-icon-white.png";
 import arrowIcon from "../../../assets/icons/back-arrow-icon-white.png";
-import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import { useParams } from "react-router-dom";
+
+import React from 'react';
 
 
 
 
-export const ProfileInfo = () => {
 
-    const { usernameParam } = useParams();
-    console.log(usernameParam)
+export const ProfileInfo = (props) => {
 
-
-    const [user, setUser] = useState({})
-    const [posts, setPosts] = useState({})
-    const [isFollowing, setIsFollowing] = useState(false)
-    const [loading, setLoading] = useState(true)
-    
-    
-
-    useEffect(() => {
-        const fetchProfileObject = async () => {
-            try {
-                let response = ''
-                if (usernameParam) {
-                    response = await axios.get(`http://localhost:8082/user/profile/${usernameParam}`, {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                    })
-                } else {
-                    response = await axios.get(`http://localhost:8082/user/profile`, {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                    }) 
-                }
-
-                if (response.status === 200) {
-                    setUser(response.data.user)
-                    setPosts(response.data.posts)
-                    setIsFollowing(response.data.followingThisUser)
-                    console.log(isFollowing)
-                    setLoading(false)
-                    console.log(response)
-                } else {
-                    console.log('Failed to fetch user profile, did not receive http 200')
-                }
-                } catch (error) {
-                    console.error(error)
-                }
-             
-        }
-        fetchProfileObject()
-    }, [])
 
 
 
@@ -64,8 +20,8 @@ export const ProfileInfo = () => {
         <div className="flex flex-col w-screen h-32 bg-black">
             <div className="flex flex-row w-full justify-between items-center py-5 px-2 text-center">
                 <img className="h-5 w-5" src={arrowIcon}></img>
-                { loading ? (<h2 className="text-white font-bold text-md"></h2>)
-                 : (<h2 className="text-white font-bold text-md">{user.username}</h2>)}
+                { props.loading ? (<h2 className="text-white font-bold text-md"></h2>)
+                 : (<h2 className="text-white font-bold text-md">{props.user.username}</h2>)}
 
                 <div className="flex flex-row justify-center items-center gap-4">
                     <img className="h-5 w-5" src={notificationBell}></img>
@@ -75,31 +31,31 @@ export const ProfileInfo = () => {
             </div>
             <div className="flex flex-row justify-around w-full gap-20 items-center px-5">
                 <div className="h-20 w-20 rounded-full bg-white overflow-hidden">
-                    { loading ? <img className="w-full h-full object-cover bg-black"></img>
-                    : (<img src={user.profilePicture} className="w-full h-full object-cover"></img>)}
+                    { props.loading ? <img className="w-full h-full object-cover bg-black"></img>
+                    : (<img src={props.user.profilePicture} className="w-full h-full object-cover"></img>)}
                 </div>
                 <div className="flex flex-row gap-5">
                     <div className="flex flex-col justify-center text-center">
-                        { loading ? <p className="font-inter text-xs font-bold text-white">0</p>
-                        : (<p className="font-inter text-xs font-bold text-white">{user.posts.length}</p>)}
+                        { props.loading ? <p className="font-inter text-xs font-bold text-white">0</p>
+                        : (<p className="font-inter text-xs font-bold text-white">{props.user.posts.length}</p>)}
                         <p className="font-inter text-xs text-white">Post</p>
                     </div>
-                    <div className="flex flex-col justify-center text-center">
-                        {loading ? <p className="font-inter text-xs font-bold text-white">0</p>
-                        : (<p className="font-inter text-xs font-bold text-white">{user.followers.length}</p>)}
+                <div className="flex flex-col justify-center text-center">
+                        {props.loading ? <p className="font-inter text-xs font-bold text-white">0</p>
+                        : (<p className="font-inter text-xs font-bold text-white">{props.user.followers.length}</p>)}
                         <p className="font-inter text-xs text-white">Followers</p>
                     </div>
                     <div className="flex flex-col justify-center text-center">
-                        {loading ? <p className="font-inter text-xs font-bold text-white">0</p>
-                        : (<p className="font-inter text-xs font-bold text-white">{user.following.length}</p>)}
+                        {props.loading ? <p className="font-inter text-xs font-bold text-white">0</p>
+                        : (<p className="font-inter text-xs font-bold text-white">{props.user.following.length}</p>)}
                         <p className="font-inter text-xs text-white">Following</p>
                     </div>
                 </div>
             </div>
             <div className="flex flex-col gap-4 mt-2">
-                <ProfileDescription bio={user.bio} username={user.username} name={user.username} loading={loading} userIsFollowing={isFollowing} />
+                <ProfileDescription bio={props.user.bio} username={props.user.username} name={props.user.username} loading={props.loading} isFollowing={props.isFollowing} />
                 
-                <ProfileFeed posts={posts} loading={loading} />
+                <ProfileFeed posts={props.posts} loading={props.loading} />
             </div>
         </div>
     )

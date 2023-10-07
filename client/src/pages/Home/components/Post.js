@@ -7,12 +7,12 @@ import axios from 'axios';
 
 
 export const Post = (props) => {
-    console.log(props.post)
 
-    const handleLike = async (postId) => {
+
+    const handleLike = async () => {
         try {
-            await axios.post('https://localhost:8082/user/like',
-            {postId: postId}, {
+            await axios.post('https://localhost:8082/feed/like',
+            {postId: props.postId}, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             }).then((res) => {
@@ -20,6 +20,8 @@ export const Post = (props) => {
                 //need to display new likes amount
                 console.log('Post liked successfully')
                 }
+            }).catch((err) => {
+                console.log(err)
             })
             
         } catch (error) {
@@ -44,15 +46,17 @@ export const Post = (props) => {
             </div>
 
             <div className="w-full h-96 bg-zinc-600">
-                <img src={props.post.postMedia} className='w-full h-full object-cover'></img>
+                <img src={props.post.media} className='w-full h-full object-cover'></img>
             </div>
 
             <div className="flex flex-row w-full h-10 items-center justify-around gap-60">
                 <div className="flex flex-row items-center justify-evenly gap-3">
-                    <a onClick={handleLike(props.post._id)} >
+                    <a onClick={handleLike} >
                         <img className='h-6 w-6' src={likeIcon}></img>
                     </a>
-                    <img className='h-6 w-6' src={commentIcon}></img>
+                    <a onClick={props.backFn}>
+                        <img className='h-6 w-6' src={commentIcon}></img>
+                    </a>
                     <img className='h-6 w-6' src={shareIcon}></img>
                 </div>
                 <div className='flex items-center justify-center'>
