@@ -19,7 +19,9 @@ export const ProfileInfo = (props) => {
     return(
         <div className="flex flex-col w-screen h-32 bg-black">
             <div className="flex flex-row w-full justify-between items-center py-5 px-2 text-center">
-                <img className="h-5 w-5" src={arrowIcon}></img>
+                <a onClick={props.routeBack}>
+                    <img className="h-5 w-5" src={arrowIcon} ></img>
+                </a>
                 { props.loading ? (<h2 className="text-white font-bold text-md"></h2>)
                  : (<h2 className="text-white font-bold text-md">{props.user.username}</h2>)}
 
@@ -55,7 +57,7 @@ export const ProfileInfo = (props) => {
             <div className="flex flex-col gap-4 mt-2">
                 <ProfileDescription bio={props.user.bio} username={props.user.username} name={props.user.username} loading={props.loading} isFollowing={props.isFollowing} />
                 
-                <ProfileFeed posts={props.posts} loading={props.loading} />
+                <ProfileFeed posts={props.posts} loading={props.loading} showFeed={props.showFeed} setSelectedPost={props.setSelectedPost}/>
             </div>
         </div>
     )

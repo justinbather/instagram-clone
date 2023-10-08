@@ -1,27 +1,39 @@
 import { Navbar } from "../components/Navbar";
 import { ProfileFeed } from "./components/ProfileFeed";
 import { ProfileInfo } from "./components/ProfileInfo";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Feed } from "../Home/components/Feed";
 
 
 export const Profile = () => {
 
-    const { username } = useParams()
-    console.log({username})
+    const { usernameParam } = useParams()
+    const navigate = useNavigate() // For use with back button navigation
 
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState({})
     const [isFollowing, setIsFollowing] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [feedView, setFeedView] = useState(false)
+    const [selectedPost, setSelectedPost] = useState() //todo: figure out how to scroll to the selected post given the post id maybe, props show the post id so just have to connect it
+
+    const showFeed = (feedValue) => {
+        setFeedView(feedValue)
+        console.log("toggling feed: ", feedValue, selectedPost)
+    }
+
+    useEffect(() => {
+        console.log(selectedPost)
+    }, [selectedPost])
     
     useEffect(() => {
         const fetchProfileObject = async () => {
             try {
                 let response = ''
-                if (username) {
-                    response = await axios.get(`http://localhost:8082/user/profile/${username}`, {
+                if (usernameParam) {
+                    response = await axios.get(`http://localhost:8082/user/profile/${usernameParam}`, {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
                     })
@@ -50,13 +62,23 @@ export const Profile = () => {
         fetchProfileObject()
     }, [])
    
-
-    return (
-        <div className="flex flex-col w-screen h-screen bg-black gap-2">
-            <ProfileInfo user={user} loading={loading} isFollowing={isFollowing} posts={posts}/>
-            <div className="w-full bottom-0 fixed">
-                <Navbar />
+    if (!feedView) {
+        return (
+            <div className="flex flex-col w-screen h-screen bg-black gap-2">
+                <ProfileInfo user={user} loading={loading} isFollowing={isFollowing} posts={posts} routeBack={() => navigate(-1)} showFeed={showFeed} setSelectedPost={setSelectedPost}/>
+                <div className="w-full bottom-0 fixed">
+                    <Navbar />
+                </div>
             </div>
-        </div>
-    )
+        )
+    } else {
+        return (
+            <div className="flex flex-col w-screen h-screen bg-black gap-2">
+                <Feed feed={posts} loading={loading} selectedPost={selectedPost}/>
+                <div className="w-full bottom-0 fixed">
+                    <Navbar />
+                </div>
+            </div>
+        )
+    }
 };

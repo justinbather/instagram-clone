@@ -39,7 +39,7 @@ export const ProfileFeed = (props) => {
                     </>)
                 : (props.posts.map((post) => (
                     <div className="w-1/3 aspect-square bg-zinc-700">
-                        <a onClick={() => toggleView(post)}>
+                        <a onClick={() => (props.showFeed(true), props.setSelectedPost(post._id))}>
                         <img src={post.media} className="w-full h-full object-cover"></img>
                         </a>
                     </div>

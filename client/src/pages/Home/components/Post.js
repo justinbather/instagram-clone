@@ -45,7 +45,7 @@ export const Post = (props) => {
                 </div>
             </div>
 
-            <div className="w-full h-96 bg-zinc-600">
+            <div className="w-full h-96 bg-zinc-600" id={props.post._id}>
                 <img src={props.post.media} className='w-full h-full object-cover'></img>
             </div>
 
