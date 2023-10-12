@@ -58,6 +58,11 @@ export const FetchProfile = async (req, res) => {
         try {
             const userProfile = await User.findOne({username: usernameParam});
             const user = await User.findById(req.user);
+            let isOwner = false;
+
+            userProfile === user ? isOwner = true : isOwner = false
+            console.log(isOwner)
+            
 
             if (!userProfile) {
                 return res.status(400).json({message:'Could not find user'})
@@ -70,7 +75,7 @@ export const FetchProfile = async (req, res) => {
             return res.status(200).json({user:{ username: userProfile.username, 
                                                     bio: userProfile.bio, profilePicture: userProfile.profilePicture,
                                                     posts: userProfile.posts, following: userProfile.following,
-                                                    followers: userProfile.followers}, posts, followingThisUser})
+                                                    followers: userProfile.followers}, posts, followingThisUser, isOwner})
         } catch (error) {
             return res.status(400).json({message:'Could not find posts'})
         }
@@ -84,12 +89,14 @@ export const FetchProfile = async (req, res) => {
                     return res.status(404).json({message:'User does not exist'})
                 }
 
+                let isOwner = true;
+                console.log(isOwner)
                 const posts = await Post.find({author: user._id})
                 return res.status(200).json({user:{ username: user.username, 
                                                 email: user.email, bio: user.bio, 
                                                 profilePicture: user.profilePicture,
                                                 posts: user.posts, following: user.following,
-                                                followers: user.followers}, posts})
+                                                followers: user.followers}, posts, isOwner})
         
                 
             } catch(err) {

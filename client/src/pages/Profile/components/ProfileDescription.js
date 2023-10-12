@@ -15,7 +15,7 @@ export const ProfileDescription = (props) => {
                 <div className="h-5 w-5 rounded-full bg-white"></div>
                 <p className="font-inter font-bold text-white text-xs text-left">Followed by michael</p>
             </div>
-            <ProfileActions isFollowing={props.isFollowing} username={props.username} />
+            <ProfileActions isFollowing={props.isFollowing} username={props.username} isOwner={props.isOwner} toggleEditView={props.toggleEditView} />
         </div>
     )
 };

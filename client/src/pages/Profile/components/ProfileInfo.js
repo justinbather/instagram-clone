@@ -55,7 +55,7 @@ export const ProfileInfo = (props) => {
                 </div>
             </div>
             <div className="flex flex-col gap-4 mt-2">
-                <ProfileDescription bio={props.user.bio} username={props.user.username} name={props.user.username} loading={props.loading} isFollowing={props.isFollowing} />
+                <ProfileDescription bio={props.user.bio} username={props.user.username} name={props.user.username} loading={props.loading} isFollowing={props.isFollowing} isOwner={props.isOwner} toggleEditView={ props.toggleEditView}/>
                 
                 <ProfileFeed posts={props.posts} loading={props.loading} showFeed={props.showFeed} setSelectedPost={props.setSelectedPost}/>
             </div>
