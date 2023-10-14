@@ -1,10 +1,13 @@
 import arrowIcon from '../../../assets/icons/back-arrow-icon-white.png';
 import { useState } from 'react';
 import { EditProfileForm } from './EditProfileForm';
+import axios from 'axios';
+import { UploadImageForm } from './UploadImageForm';
 
 export const EditProfile = (props) => {
 
     const [editView, setEditView] = useState(false)
+    const [imageUploadView, setImageUploadView] = useState(false)
     const [valueField, setValueField] = useState({})
 
     const toggleEdit = (field, value) => {
@@ -12,10 +15,24 @@ export const EditProfile = (props) => {
         setEditView(!editView)
     }
 
+    const toggleImageForm = () => {
+        setImageUploadView(!imageUploadView)
+    }
+
+    
+
     if (editView) {
         return (
             <div>
                 <EditProfileForm toggleEdit={toggleEdit} formObj={valueField} />
+            </div>
+        )
+    }
+
+    if (imageUploadView) {
+        return (
+            <div>
+                <UploadImageForm toggleImageForm={toggleImageForm} />
             </div>
         )
     }
@@ -30,7 +47,9 @@ export const EditProfile = (props) => {
                 <h2 className="text-white font-bold text-md">Edit profile</h2>
             </div>
             <div className='w-full flex flex-row items-center my-10 justify-center'>
-                <img className='h-20 w-20 rounded-full' src={props.user.profilePicture}></img>
+                <a onClick={toggleImageForm}>
+                    <img className='h-20 w-20 rounded-full' src={props.user.profilePicture}></img>
+                </a>
             </div>
             <div className='w-full flex flex-col'>
                 <div className='w-full border-t-[1px] border-t-zinc-600 flex flex-row py-2 pl-2 justify-start gap-5' onClick={() => toggleEdit('username', props.user.username)}>

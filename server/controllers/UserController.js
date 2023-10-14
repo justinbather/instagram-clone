@@ -16,12 +16,11 @@ export const CreatePost = async (req, res, next) => {
         
         const mediaUrl = await uploadImage(req, res, async (error) => {
                 if(error) {
-                    console.log('promise rejecting')
+                    
                     return res.status(500).json({message: 'error uploading'})
 
                 } else {
-                    console.log('promise resolved')
-                    console.log(mediaUrl)
+                    
                     return res
                 }
             })
@@ -61,7 +60,7 @@ export const FetchProfile = async (req, res) => {
             let isOwner = false;
 
             userProfile === user ? isOwner = true : isOwner = false
-            console.log(isOwner)
+            
             
 
             if (!userProfile) {
@@ -71,7 +70,7 @@ export const FetchProfile = async (req, res) => {
             const posts = await Post.find({author: userProfile._id})
             const followingThisUser = user.following.includes(userProfile._id)
             
-            console.log('following '+ followingThisUser)
+            
             return res.status(200).json({user:{ username: userProfile.username, 
                                                     bio: userProfile.bio, profilePicture: userProfile.profilePicture,
                                                     posts: userProfile.posts, following: userProfile.following,
@@ -84,13 +83,13 @@ export const FetchProfile = async (req, res) => {
 
             try {
                 const user = await User.findById(req.user);
-                console.log(user)
+                
                 if (!user) {
                     return res.status(404).json({message:'User does not exist'})
                 }
 
                 let isOwner = true;
-                console.log(isOwner)
+                
                 const posts = await Post.find({author: user._id})
                 return res.status(200).json({user:{ username: user.username, 
                                                 email: user.email, bio: user.bio, 
@@ -106,9 +105,12 @@ export const FetchProfile = async (req, res) => {
     };
 
 export const UpdateProfile = async (req, res) => {
+
+    console.log(req)
     try {
         
         if (req.file) {
+            console.log(req)
             uploadProfilePicture(req, res, async(error) => {
                 if (error) {
                     return res.status(500).json({message: 'Error uploading image'})
@@ -116,8 +118,9 @@ export const UpdateProfile = async (req, res) => {
             });
         } else {
             const update = req.body;
+            console.log(update)
             const user = await User.findByIdAndUpdate(req.user, update)
-            return res.status(202).json({message: 'User updated', user, update})
+            return res.status(200).json({message: 'User updated', user, update})
         }
         
         } catch(error) {
@@ -132,7 +135,7 @@ export const fetchFollowing = async (req, res) => {
         const user = await User.findById(req.user)
         if (user) {
             const following = await User.findById(req.user).populate('following', ['_id','username', 'bio', 'profilePicture']).exec()
-            console.log(following)
+            
             return res.status(200).json({success: true, following})
         }
     } catch(error) {
@@ -150,16 +153,16 @@ export const FollowUser = async (req, res) => {
 
         const followUser = await User.findOne({username: req.body.username})
         if (!user) { 
-            console.log('Please log in')
+            
             return res.status(400).json({message:'User not logged in'})
          }
          if (!followUser) {
-            console.log('User does not exist')
+            
             return res.status(400).json({message: 'Could not find user with posted username, user does not exist'})
          }
 
         if (user.following.includes(followUser._id)) {
-            console.log('You already follow this user')
+            
             res.status(400).json({message: 'user already follows posted user'})
         } else {
             user.following.push(followUser)
@@ -182,11 +185,11 @@ export const unfollowUser = async (req, res) => {
         const user = await User.findById(req.user)
         const unfollowUser = await User.findOne({username: req.body.username}) //Username posted in request body
          if (!user) { 
-            console.log('Please log in')
+            
             return res.status(400).json({message:'User not found when trying to find user in DB to unfollow'})
          }
          if (!unfollowUser) {
-            console.log('User does not exist')
+            
             return res.status(400).json({message: 'Could not find user with posted username, user does not exist'})
          }
          //User and unfollowUser exists
@@ -202,7 +205,7 @@ export const unfollowUser = async (req, res) => {
          }
             
          } catch(error) {
-            console.log(error)
+            
             return res.status(500).json({message: "An error occured when attempting to unfollow a user", error: error})
          }
     };

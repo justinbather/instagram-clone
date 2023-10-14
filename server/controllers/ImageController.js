@@ -20,6 +20,7 @@ const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
 
 export const uploadImage = async (req, res) => {
+    console.log(req)
     return new Promise(async (resolve, reject) => {
         try {
             if (!req.file) {
@@ -34,7 +35,7 @@ export const uploadImage = async (req, res) => {
     
             const uploadResponse = await s3.upload(params).promise();
             const mediaUrl = uploadResponse.Location
-            console.log(mediaUrl)
+            
             //Returns the location url for the image with .Location
             resolve(mediaUrl);
         } catch (error) {

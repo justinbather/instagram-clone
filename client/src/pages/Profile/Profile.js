@@ -25,16 +25,14 @@ export const Profile = () => {
 
     const showFeed = (feedValue) => {
         setFeedView(feedValue)
-        console.log("toggling feed: ", feedValue)
+        
     }
 
     const toggleEditView = () => {
         setEditView(!editView)
     }
 
-    useEffect(() => {
-        console.log(selectedPost)
-    }, [selectedPost])
+  
     
     useEffect(() => {
         const fetchProfileObject = async () => {
