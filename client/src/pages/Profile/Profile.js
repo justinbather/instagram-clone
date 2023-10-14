@@ -81,7 +81,7 @@ export const Profile = () => {
             <div className="flex flex-col w-screen h-screen bg-black gap-2">
                 <ProfileInfo user={user} isOwner={isOwner} loading={loading} isFollowing={isFollowing} posts={posts} routeBack={() => navigate(-1)} showFeed={showFeed} setSelectedPost={setSelectedPost} toggleEditView={toggleEditView}/>
                 <div className="w-full bottom-0 fixed">
-                    <Navbar />
+                    <Navbar profilePicture={user.profilePicture} />
                 </div>
             </div>
         )
@@ -90,7 +90,7 @@ export const Profile = () => {
             <div className="flex flex-col w-screen h-screen bg-black gap-2">
                 <Feed feed={posts} loading={loading} selectedPost={selectedPost}/>
                 <div className="w-full bottom-0 fixed">
-                    <Navbar />
+                    <Navbar profilePicture={user.profilePicture}/>
                 </div>
             </div>
         )

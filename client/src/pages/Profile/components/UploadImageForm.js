@@ -15,27 +15,29 @@ export const UploadImageForm = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        try {
-            let formData = new FormData()
-            formData.append('image', currentImage)
-            const response = await axios.put('http://localhost:8082/user/edit', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                withCredentials: true, 
-            })
-
-            console.log(response)
+        if (currentImage !== undefined) {
             
-        } catch (err) {
-            throw new Error(`Error uploading image: ${err}`)
+            try {
+                let formData = new FormData()
+                formData.append('image', currentImage)
+                const response = await axios.put('http://localhost:8082/user/edit', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    withCredentials: true, 
+                })
+                //todo Do something with response?
+                props.toggleImageForm()
+            } catch (err) {
+                throw new Error(`Error uploading image: ${err}`)
+            }
         }
-    }
+    } //Todo add error state if empty or bad file
 
     return (
         <div className="w-full h-full bg-black flex flex-col">
             <div className="flex flex-row w-full mt-3 pb-3 border-b-zinc-600 border-b-[1px]">
-                <a className="h-5 w-5" onClick={props.toggleEdit}>
+                <a className="h-5 w-5" onClick={props.toggleImageForm}>
                     <img src={arrowIcon}></img>
                 </a>
                 

@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { Home } from './pages/Home/Home';
 import { Profile } from './pages/Profile/Profile';
 import { Search } from './pages/Search/Search';
+import { Post } from './pages/Post/Post';
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
         <Route path='/login' index element={<Login />}></Route>
         <Route path='/home' index element={<Home />}></Route>
         <Route path='/profile/:usernameParam?' index element={<Profile />}></Route>
-        
+        <Route path='/post' index element={<Post />}></Route>
 
         
         <Route path='/search' index element={<Search />}></Route>
