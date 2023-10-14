@@ -18,7 +18,7 @@ export const Feed = (props) => {
                         <Post post={loadingProps} />
                         <Post post={loadingProps} />
             </>)
-            : (props.feed.map((post) => (<Post post={post} />)))}
+            : (props.feed.map((post) => (<Post post={post} hasPerms={props.hasPerms} />)))}
             
         </div>
     )

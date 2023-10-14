@@ -11,7 +11,7 @@ export const Post = (props) => {
 
     const handleLike = async () => {
         try {
-            await axios.post('https://localhost:8082/feed/like',
+            await axios.post('http://localhost:8082/feed/like',
             {postId: props.postId}, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
@@ -29,6 +29,23 @@ export const Post = (props) => {
         }
     }
 
+    const handleDelete = async () => {
+        if (!props.hasPerms) {
+            return
+        }
+        
+        try {
+            const response = await axios.delete(`http://localhost:8082/user/post/${props.post._id}`, {
+                headers: {'Content-Type': 'applicaton/json'},
+                withCredentials: true,
+                
+            })
+            console.log(response)
+        } catch (err) {
+            console.log('Error deleting post', err)
+        }
+    }
+
     
     return( 
         <div className="flex flex-col w-full bg-black pb-5">
@@ -41,7 +58,7 @@ export const Post = (props) => {
                     <p className="font-inter text-xs font-bold text-white">{props.post.username}</p>
                 </div>
                 <div>
-                    <p className="font-inter text-white font-bold text-sm text-center">...</p>
+                    <a onClick={handleDelete} className="font-inter text-white font-bold text-sm text-center">...</a>
                 </div>
             </div>
 

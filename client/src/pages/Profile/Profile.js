@@ -21,6 +21,7 @@ export const Profile = () => {
     const [editView, setEditView] = useState(false)
     const [selectedPost, setSelectedPost] = useState() //todo: figure out how to scroll to the selected post given the post id maybe, props show the post id so just have to connect it
     const [isOwner, setIsOwner] = useState(false)
+    const [hasPerms, setHasPerms] = useState(false)
     
 
     const showFeed = (feedValue) => {
@@ -48,6 +49,7 @@ export const Profile = () => {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
                     }) 
+                    setHasPerms(true)
                 }
 
                 if (response.status === 200) {
@@ -88,7 +90,7 @@ export const Profile = () => {
     } else {
         return (
             <div className="flex flex-col w-screen h-screen bg-black gap-2">
-                <Feed feed={posts} loading={loading} selectedPost={selectedPost}/>
+                <Feed feed={posts} loading={loading} selectedPost={selectedPost} hasPerms={hasPerms}/>
                 <div className="w-full bottom-0 fixed">
                     <Navbar profilePicture={user.profilePicture}/>
                 </div>

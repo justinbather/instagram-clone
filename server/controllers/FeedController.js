@@ -23,6 +23,7 @@ export const FetchUserFeed = async (req, res) => {
 
             for (let j=0; j < user.following[i].posts.length; j++) {
                 let postObj = await Post.findById(user.following[i].posts[j]._id)
+                console.log(postObj)
                 let post = {
                     user: user.following[i]._id,
                     username: user.following[i].username,
@@ -34,9 +35,14 @@ export const FetchUserFeed = async (req, res) => {
                     posted: postObj.createdOn
                     //Add comments in future
                 }
+                // console.log(post)
                 feedPosts.push(post)
             }
         }
+
+        feedPosts.sort((a,b) => {
+            return b.createdOn - a.createdOn
+        })
        
         return res.status(200).json({feedPosts})
 

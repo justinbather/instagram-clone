@@ -48,6 +48,40 @@ export const CreatePost = async (req, res, next) => {
 
 };
 
+export const DeletePost = async (req, res) => {
+
+    const postParam = req.params['id']
+    if (!postParam) {
+        return res.status(400).json({message: 'No post provided'})
+    }
+
+    try {
+        const post = await Post.findById(postParam)
+        const user = await User.findById(req.user)
+
+        if (!user.posts.includes(post._id)) {
+            return res.status(401).json({message: 'Post not authored by user, deletion forbidden'})
+        }
+
+        const deleteResponse = await Post.findByIdAndDelete(post._id)
+
+        if (deleteResponse) {
+            user.posts.filter((userPost) => {
+                return userPost !== post._id
+            })
+        } else {
+            return res.status(500).json({message: `error deleting post in DB`})
+        }
+
+        return res.status(200).json({message: 'Successfully deleted post'})
+
+
+    } catch (err) {
+        return res.status(500).json({message: 'error making request', error:err})
+    }
+
+}
+
 
 // Fetches User Profile
 export const FetchProfile = async (req, res) => {
@@ -68,7 +102,15 @@ export const FetchProfile = async (req, res) => {
             }
         
             const posts = await Post.find({author: userProfile._id})
+            posts.sort((a,b) => {
+                // TODO: look into a better sort or using db to sort
+                return b.createdOn - a.createdOn
+            })
             const followingThisUser = user.following.includes(userProfile._id)
+
+            console.log(userProfile.posts)
+
+        
             
             
             return res.status(200).json({user:{ username: userProfile.username, 
@@ -91,6 +133,10 @@ export const FetchProfile = async (req, res) => {
                 let isOwner = true;
                 
                 const posts = await Post.find({author: user._id})
+                posts.sort((a,b) => {
+                    // TODO: look into a better sort or using db to sort
+                    return b.createdOn - a.createdOn
+                })
                 return res.status(200).json({user:{ username: user.username, 
                                                 email: user.email, bio: user.bio, 
                                                 profilePicture: user.profilePicture,

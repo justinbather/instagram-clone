@@ -7,7 +7,7 @@ export const userVerification = (req, res, next) => {
    
     
     if (!token) {
-        
+        console.log('no token')
         return res.redirect('/login')
     } // replace token with dotenv import token
     jwt.verify(token, 'dksiwmc34m5h9rm53hdswxfki8736225', async (err, data) => {
